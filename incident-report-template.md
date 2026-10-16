@@ -44,18 +44,7 @@ Other headers of note: `X-Mailer: PHPMailer 5.2.1` (bulk-mailing library), `X-Pr
 
 **Caveat:** these authentication headers were written into the synthetic sample, so they are not independently verified receiving-server results. In a real case, trust only the `Authentication-Results` added by your own mail gateway (the topmost one) and treat any headers added earlier in the chain as attacker-controllable.
 
-## 6. URL/domain analysis
-| URL or domain | Tool/source | Observation | Risk interpretation |
-|---|---|---|---|
-| `hxxp://securetrust-login-verify[.]example/secure/login?session=a8f3c92e71b4&ref=alert` | HTML source inspection; `analyze_eml.py` | Real `href` differs from the displayed text `https://www.securetrust.example/secure-login`; plain HTTP; session-style token in the query string | High: link spoofing with a look-alike domain and a victim-specific token |
-| `securetrust-bank-verify[.]example` | Header inspection | Sender domain; look-alike wording; SPF fail, DKIM none, DMARC fail | High: spoofed or look-alike sender |
-| `mailer-svc[.]example` | Header inspection | Used in `Return-Path`, `Message-ID` and the SPF mailfrom | Medium: bulk-mail relay domain unrelated to the apparent sender |
-| `mail-reply[.]example` | Header inspection | Used in `Reply-To` | Medium: reply channel controlled by a third party |
-| `hxxp://track[.]mailer-svc[.]example/pixel[.]gif?u=rahul[.]sharma` | HTML source inspection | 1x1 image carrying the recipient's identifier | Medium: confirms the address is live and records email opens |
-| `203[.]0[.]113[.]45` | `Received` header, `X-Originating-IP` | Address from the RFC 5737 documentation range | Reputation not applicable for a documentation address |
-| All indicators above | MXToolbox, AbuseIPDB, VirusTotal, Cisco Talos, URLScan.io, ANY.RUN, Hybrid Analysis | **Not yet performed.** Because the domains use the reserved `.example` TLD and the IP is a documentation address, "not found" or "no data" results are expected, and the actual output will be recorded here | Pending |
-
-## 7. Social-engineering indicators
+## 6. Social-engineering indicators
 - **Urgency / threat / unexpected request:** Observed. "Within 24 hours", "permanently closed", "funds may be frozen", subject in capitals.
 - **Sender identity mismatch:** Observed. Bank display name on a look-alike domain; `Return-Path`, `Reply-To` and `Message-ID` use other domains.
 - **Credential or payment request:** Credential request observed (implied). The message asks the recipient to "verify" through a login-path URL; the landing page was not retrieved, so credential harvesting is inferred, not confirmed. Payment request not observed.
@@ -63,7 +52,7 @@ Other headers of note: `X-Mailer: PHPMailer 5.2.1` (bulk-mailing library), `X-Pr
 - **Attachments:** Suspecious Link Observed.
 - **Relationship to the recipient (does the user actually bank with this institution):** Not assessable; the recipient is fictional.
 
-## 8. Indicators of compromise (IOCs)
+## 7. Indicators of compromise (IOCs)
 All indicators below are **synthetic/example** values (reserved `.example` TLD, RFC 5737 IP). They were validated by manual inspection of headers and HTML only; none has been checked against threat intelligence. Full list: `data/iocs.csv`.
 
 | Type | Indicator (defanged) | Context |
@@ -74,33 +63,32 @@ All indicators below are **synthetic/example** values (reserved `.example` TLD, 
 | IP address | `137.184.34.4` | Sending IP |
 | URL | `https://blog1seguimentmydomaine2bra.me/` | Phishing link |
 
-## 9. Timeline
+## 8. Timeline
 | Time (UTC) | Event | Source |
 |---|---|---|
 | 2026-10-16 03:12:38 | Message dated by sender (08:42:38 +0530) | `Date` header (synthetic) |
-| 2026-10-16 03:12:41 | Message queued on `mail-gw01.securetrust-bank-verify[.]example` | Bottom `Received` header |
-| 2026-10-16 03:12:44 | Accepted by `mx.victim-company[.]example` | Top `Received` header |
+| 2026-10-16 03:12:41 | Message queued on `BANCO DO BRADESCO LIVELO<banco.bradesco@atendimento.com` | Bottom `Received` header |
+| 2026-10-16 03:12:44 | Accepted by `phishing@pot` | Top `Received` header |
 | 2026-10-16 (time not recorded) | Synthetic sample created for the lab | Project files |
-| 2026-10-16 (time not recorded) | Offline header and link analysis completed | `analyze_eml.py`, manual review |
+| 2026-10-16 (time not recorded) | Offline header and link analysis completed | manual review |
 | Pending | Header analysis cross-check and reputation checks | MXToolbox, reputation services |
 | Pending | URL detonation | URLScan.io, ANY.RUN, Hybrid Analysis |
 
-## 10. Verdict and confidence rationale
+## 9. Verdict and confidence rationale
 The verdict is **phishing** because several independent signals agree: SPF and DMARC failure with no DKIM signature, three different domains across `Return-Path`, `Reply-To` and `Message-ID`, a displayed link that does not match its real destination, HTTP instead of HTTPS, a recipient-specific tracking pixel, a bulk-mailer library in `X-Mailer`, and classic urgency and threat language. The behaviour maps to MITRE ATT&CK T1566.002 (Phishing: Spearphishing Link), T1598.003 (Phishing for Information: Spearphishing Link) and T1204.001 (User Execution: Malicious Link).
 
 No single signal is conclusive on its own. A different `Return-Path` is normal for legitimate mail sent through an email service provider, and an SPF failure can result from forwarding. The verdict rests on the combination, especially the spoofed link and the sender identity mismatch. Uncertainty remains because the sample and its authentication headers are synthetic, the landing page was never retrieved, and no reputation data has been gathered yet.
 
-## 11. Recommended response
+## 10. Recommended response
 - Do not click links or open attachments.
 - Report the email using the organization's approved process.
 - If delivered to multiple users, search mail logs for the sender, Reply-To address, subject and URL, then quarantine or delete through authorized administrators.
 - If credentials were entered, reset credentials and revoke sessions; review MFA and sign-in activity.
 - Block confirmed malicious indicators only after validation and change-control review. For this sample, the candidates are the sender, Reply-To and link domains and the full phishing URL.
-- Search proxy and DNS logs for visits to `securetrust-login-verify[.]example` to identify users who clicked.
 - Preventive: enforce DMARC at `quarantine` or `reject` on owned domains, enable URL rewriting and sandboxing at the mail gateway, and use phishing-resistant MFA.
 
 
-## 12. Limitations
+## 11. Limitations
 - The sample is **synthetic**. The domains use the reserved `.example` TLD and the IP is a documentation address, so DNS, WHOIS, reputation and sandbox lookups return no live data.
 - The authentication results were authored into the sample and are not independently verified by a real receiving server.
 - The phishing landing page was not retrieved; credential harvesting is inferred from the URL structure and message content.
