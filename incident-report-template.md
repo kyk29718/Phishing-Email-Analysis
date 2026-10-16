@@ -17,9 +17,9 @@ The message was analyzed **offline first**: the raw `.eml` file was read in a pl
 |---|---|---|
 | Text editor (raw `.eml`) | Reading headers, MIME parts and the HTML `href` values | Done |
 | "NOTEPAD" | Header consistency checks, authentication results, link/text mismatch, tracking pixel, risk score, defanged IOCs | Done (risk score 20, HIGH) |
-| MXToolbox (Email Header Analyzer, SPF/DKIM/DMARC/MX/blacklist, WHOIS) | Cross-checking headers and domain records | Pending |
-| AbuseIPDB, VirusTotal, Cisco Talos | Reputation of the sending IP, domains and URL | Pending |
-| URLScan.io, ANY.RUN, Hybrid Analysis | Safe detonation of the link | Pending |
+| MXToolbox (Email Header Analyzer, SPF/DKIM/DMARC/MX/blacklist, WHOIS) | Cross-checking headers and domain records | Done |
+| AbuseIPDB, VirusTotal, Cisco Talos | Reputation of the sending IP, domains and URL | Done |
+| URLScan.io, ANY.RUN, Hybrid Analysis | Safe detonation of the link | Done |
 
 Limitations of the method are listed in section 13.
 
