@@ -29,7 +29,7 @@ This project does **not** use Splunk.
 5. **Check reputation carefully.** Search only public, non-sensitive indicators in VirusTotal. If using urlscan.io, select visibility deliberately. Public scans can expose submitted URLs and scan details. Never submit personal, authenticated, confidential, or tokenized URLs. See the service documentation linked below.
 6. **Record evidence.** For every claim, record the tool, query/indicator, date/time (UTC if possible), result, screenshot filename, and analyst interpretation.
 7. **Make a verdict.** Use `Phishing`, `Suspicious`, `Benign`, or `Inconclusive` and explain confidence. Separate observed facts from interpretation.
-8. **Write the report.** Copy `reports/incident-report-template.md` and replace placeholders with actual results. Do not invent results.
+8. **Write the report.** Copy `incident-report.md` and replace placeholders with actual results. Do not invent results.
 9. **Publish safely.** Remove personal data, real email addresses, internal hostnames, authentication tokens, private URLs, API keys, and confidential message content before pushing to GitHub.
 
 ## Public-service privacy cautions
@@ -38,7 +38,7 @@ This project does **not** use Splunk.
 - Prefer already-existing reputation results for safe, public indicators. Do not submit a private organization's URLs or an employee's unique tracking links.
 
 ## Evidence and screenshots
-Save screenshots in `evidence/screenshots/` with descriptive names. The screenshot checklist is in `evidence/screenshots/README.md`. Redact personal information, access tokens, browser profiles, and unrelated tabs.
+Save screenshots in `screenshots` with descriptive names.
 
 ## Limitations
 - The bundled sample is a simulation; its header fields are illustrative, not evidence of a real sender or real SPF/DKIM/DMARC results.
