@@ -57,24 +57,28 @@ Save screenshots in `evidence/screenshots/` with descriptive names. The screensh
 
 ### 1. Email Header Analysis
 The sender's email address, Return-Path, recipient address and relevant sender IP information were identified from the email headers. These values were recorded as part of the evidence collection process.
-![alt text](<Header values.png>)
-![alt text](HeaderDetails.png)
+<img width="1920" height="1002" alt="HeaderDetails" src="https://github.com/user-attachments/assets/59d4ca05-27ad-42b4-ae86-8b70eacd277e" />
+<img width="1645" height="379" alt="Header values" src="https://github.com/user-attachments/assets/3cdbd690-052b-44fa-94f7-58da6f61e72c" />
 
 ### 2. IP Reputation Analysis
 The identified IP address was checked using the Blacklist Check feature on MXToolbox. The lookup reported that the IP was blacklisted.
-![alt text](<Senders ip.png>)
+<img width="1645" height="379" alt="Senders ip" src="https://github.com/user-attachments/assets/893a0651-9e9f-42fb-adcf-f9b4d0ff3280" />
+
 This finding indicates a potential reputation concern. The specific blacklist provider, listing reason and lookup timestamp should be retained as evidence. A blacklist result alone does not conclusively establish that the email is malicious.
-![alt text](<Senders ip rerutation-1.png>)
+<img width="1551" height="525" alt="Senders ip rerutation" src="https://github.com/user-attachments/assets/a06fec58-b0a6-4f16-95b9-9eae379d1038" />
+
 ### 3. SPF Authentication Analysis
 The SPF authentication check performed using MXToolbox returned a `fail` result.
 
 This indicates that the sending IP did not satisfy the evaluated domain's SPF policy. The result should be interpreted alongside the original email headers and the relevant domain's SPF configuration.
-![alt text](SPF_Authentication.png)
+<img width="1920" height="997" alt="SPF_Authentication" src="https://github.com/user-attachments/assets/e0314a11-16f2-452e-9489-fb7172cd5ebe" />
+
 ### 4. Hyperlink Inspection
 The email contained a clickable link associated with the expiring-loyalty-points message. Hovering over the link revealed a destination different from the link's displayed text or apparent destination.
 
 This discrepancy was documented as a potential indicator of URL obfuscation or redirection. The destination must be assessed separately before it can be classified as malicious.
-![alt text](Email.png)
+<img width="1909" height="1030" alt="Email" src="https://github.com/user-attachments/assets/435bf416-6a0f-459e-8710-7524d2c15eb6" />
+
 ### 5. Overall Assessment
 The investigation identified multiple indicators requiring further scrutiny: a reported IP blacklist listing, an SPF failure, and a potentially misleading hyperlink.
 
